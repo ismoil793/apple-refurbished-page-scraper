@@ -1,9 +1,10 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const TelegramBot = require('node-telegram-bot-api');
+require("dotenv").config();
 
 // Function to check the webpage and send Telegram notification
-const checkPageAndNotify = async () => {
+const checkPageAndNotify = async ({notification}) => {
   try {
     // Fetch the webpage content
     const response = await axios.get('https://www.apple.com/shop/refurbished/iphone');
@@ -16,13 +17,16 @@ const checkPageAndNotify = async () => {
     const desiredTextExists = $('body').text().includes('Refurbished iPhone 13 Pro');
 
     // If the text is found, send a Telegram notification
-    if (desiredTextExists) {
-      const token = 'YOUR_TELEGRAM_BOT_TOKEN';
-      const chatId = 'YOUR_TELEGRAM_CHAT_ID';
-      const bot = new TelegramBot(token, { polling: false });
+    const token = process.env.BOT_TOKEN;
+    const chatId = process.env.MY_CHAT_ID;
+    const bot = new TelegramBot(token, { polling: false });
 
+    if (desiredTextExists) {
       // Send a notification to the Telegram chat
       bot.sendMessage(chatId, 'Refurbished iPhone 13 Pro found on Apple Store!');
+    }
+    if(notification?.length) {
+        bot.sendMessage(chatId, notification);
     }
   } catch (error) {
     console.error('Error:', error.message);
@@ -39,4 +43,4 @@ const { log } = require('console');
 cron.schedule('0 8,20 * * *', () => {
   checkPageAndNotify();
 });
-checkPageAndNotify();
+checkPageAndNotify({notification: "deploy succeded!"});
