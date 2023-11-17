@@ -34,7 +34,9 @@ const checkPageAndNotify = async () => {
 
 // For example, using node-cron to run the function every day at 8 AM and 8 PM
 const cron = require('node-cron');
+const { log } = require('console');
 
 cron.schedule('0 8,20 * * *', () => {
   checkPageAndNotify();
 });
+checkPageAndNotify();
