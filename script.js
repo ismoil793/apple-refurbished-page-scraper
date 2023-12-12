@@ -4,7 +4,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require("dotenv").config();
 
 // Function to check the webpage and send Telegram notification
-const checkPageAndNotify = async ({notification}) => {
+const checkPageAndNotify = async ({ notification }) => {
   try {
     // Fetch the webpage content
     const response = await axios.get('https://www.apple.com/shop/refurbished/iphone');
@@ -15,6 +15,7 @@ const checkPageAndNotify = async ({notification}) => {
 
     // Check for the desired text
     const desiredTextExists = $('body').text().includes('Refurbished iPhone 13 Pro');
+    const desiredTextIphone12Pro = $('body').text().includes('Refurbished iPhone 12 Pro');
 
     // If the text is found, send a Telegram notification
     const token = process.env.BOT_TOKEN;
@@ -24,9 +25,11 @@ const checkPageAndNotify = async ({notification}) => {
     if (desiredTextExists) {
       // Send a notification to the Telegram chat
       bot.sendMessage(chatId, 'Refurbished iPhone 13 Pro found on Apple Store!');
+    } else if (desiredTextIphone12Pro) {
+      console.log(chatId, 'Refurbished iPhone 12 Pro found on Apple Store!');
     }
-    if(notification?.length) {
-        bot.sendMessage(chatId, notification);
+    if (notification?.length) {
+      bot.sendMessage(chatId, notification);
     }
   } catch (error) {
     console.error('Error:', error.message);
@@ -40,7 +43,9 @@ const checkPageAndNotify = async ({notification}) => {
 const cron = require('node-cron');
 const { log } = require('console');
 
-cron.schedule('0 8,20 * * *', () => {
+// every day in the morning 8AM and 8PM evening '0 8,20 * * *'
+// every hour '0 * * * *'
+cron.schedule('0 * * * *', () => {
   checkPageAndNotify();
 });
-checkPageAndNotify({notification: "deploy succeded!"});
+checkPageAndNotify({ notification: "deploy succeded!" });
