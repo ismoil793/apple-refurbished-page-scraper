@@ -4,7 +4,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require("dotenv").config();
 
 // Function to check the webpage and send Telegram notification
-const checkPageAndNotify = async ({ notification }) => {
+const checkPageAndNotify = async ({ notification } = {}) => {
   try {
     // Fetch the webpage content
     const response = await axios.get('https://www.apple.com/shop/refurbished/iphone');
