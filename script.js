@@ -24,9 +24,9 @@ const checkPageAndNotify = async ({ notification } = {}) => {
 
     if (desiredTextExists) {
       // Send a notification to the Telegram chat
-      bot.sendMessage(chatId, 'Refurbished iPhone 13 Pro found on Apple Store!');
+      bot.sendMessage(chatId, '🎉 🎊 Refurbished iPhone 13 Pro found on Apple Store!');
     } else if (desiredTextIphone12Pro) {
-      console.log(chatId, 'Refurbished iPhone 12 Pro found on Apple Store!');
+      bot.sendMessage(chatId, 'iPhone 12');
     }
     if (notification?.length) {
       bot.sendMessage(chatId, notification);
