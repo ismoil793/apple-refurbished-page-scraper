@@ -4,7 +4,7 @@ const TelegramBot = require('node-telegram-bot-api');
 require("dotenv").config();
 
 // Function to check the webpage and send Telegram notification
-const checkPageAndNotify = async ({ notification } = {}) => {
+const checkPageAndNotify = async () => {
   try {
     // Fetch the webpage content
     const response = await axios.get('https://www.apple.com/shop/refurbished/iphone');
@@ -26,10 +26,7 @@ const checkPageAndNotify = async ({ notification } = {}) => {
       // Send a notification to the Telegram chat
       bot.sendMessage(chatId, '🎉 🎊 Refurbished iPhone 13 Pro found on Apple Store!');
     } else if (desiredTextIphone12Pro) {
-      bot.sendMessage(chatId, 'iPhone 12');
-    }
-    if (notification?.length) {
-      bot.sendMessage(chatId, notification);
+      bot.sendMessage(chatId, 'iPhone 12 Pro found');
     }
   } catch (error) {
     console.error('Error:', error.message);
@@ -48,4 +45,3 @@ const { log } = require('console');
 cron.schedule('0 * * * *', () => {
   checkPageAndNotify();
 });
-checkPageAndNotify({ notification: "deploy succeded!" });
